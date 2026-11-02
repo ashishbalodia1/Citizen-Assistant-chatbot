@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #5c94fc; /* Classic Super Mario NES Sky Blue */
+    color: #1e293b;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+  }
+}
+
+.mario-font {
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* Classic Mario Pixel Borders & Shadows */
+.pixel-box {
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.pixel-box-sm {
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.pixel-btn {
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px #000;
+  transition: all 0.08s ease-in-out;
+}
+
+.pixel-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000;
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* Super Mario Question Block Styling */
+.question-block {
+  background: linear-gradient(180deg, #ffd700 0%, #ff9900 100%);
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0px #000, inset -2px -2px 0px #c66900, inset 2px 2px 0px #fff480;
+}
+
+/* Mario Brick Pattern for Ground */
+.mario-ground {
+  background-color: #d84400;
+  background-image: 
+    linear-gradient(335deg, rgba(0,0,0,0.3) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(0,0,0,0.3) 23px, transparent 23px),
+    linear-gradient(335deg, rgba(0,0,0,0.3) 23px, transparent 23px),
+    linear-gradient(155deg, rgba(0,0,0,0.3) 23px, transparent 23px);
+  background-size: 58px 58px;
+  background-position: 0px 2px, 4px 35px, 29px 31px, 34px 4px;
+  border-top: 4px solid #000;
+}
+
+/* Pixel Clouds */
+.mario-cloud {
+  background: #ffffff;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
+  border-radius: 20px;
+  position: relative;
+}
+
+/* Custom retro scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #a0c4ff;
+  border-left: 2px solid #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #e52521; /* Mario Red */
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b71c1c;
+}

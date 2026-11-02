@@ -1,0 +1,94 @@
+-- City Guardian Database Schema
+
+CREATE TABLE IF NOT EXISTS wards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ward_name VARCHAR(100) NOT NULL,
+    team_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    phone VARCHAR(20) UNIQUE NOT NULL,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    ward_id INT,
+    role VARCHAR(50) DEFAULT 'CITIZEN',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ward_id) REFERENCES wards(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS complaints (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    latitude FLOAT,
+    longitude FLOAT,
+    address VARCHAR(255),
+    image_path VARCHAR(255),
+    severity VARCHAR(50) DEFAULT 'MEDIUM',
+    status VARCHAR(50) DEFAULT 'PENDING_VERIFICATION',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS missions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    complaint_id INT UNIQUE NOT NULL,
+    ward_id INT NOT NULL,
+    assigned_team VARCHAR(100) NOT NULL,
+    deadline DATETIME NOT NULL,
+    status VARCHAR(50) DEFAULT 'ASSIGNED',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (complaint_id) REFERENCES complaints(id) ON DELETE CASCADE,
+    FOREIGN KEY (ward_id) REFERENCES wards(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mission_updates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mission_id INT NOT NULL,
+    update_text TEXT NOT NULL,
+    evidence_path VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS rewards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL,
+    points INT DEFAULT 50,
+    badge_level VARCHAR(50) DEFAULT 'New Guardian',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS coupons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    business_name VARCHAR(120) NOT NULL,
+    offer VARCHAR(255) NOT NULL,
+    points_required INT NOT NULL,
+    expiry_date DATETIME,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS conversations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_id VARCHAR(100) UNIQUE NOT NULL,
+    state_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    conversation_id INT NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    message TEXT NOT NULL,
+    metadata_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+);
+
